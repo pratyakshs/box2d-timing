@@ -118,7 +118,7 @@ int main(int argc, char** argv)
 	test_index = 0;
 	int num_iterations;
 	test_selection = test_index;
-    scanf("%i",&num_iterations);
+	sscanf(argv[1], "%d", &num_iterations);
 	entry = sim;
 	test = entry->create_fcn();
 	float32 sum_step=0,sum_coll=0,sum_vel=0,sum_pos=0;
