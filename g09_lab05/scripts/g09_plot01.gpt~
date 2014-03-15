@@ -1,8 +1,0 @@
-#! /bin/bash
-#set key inside left top vertical Right noreverse enhanced autotitles box linetype -1 linewidth 1.000
-set title "Step time average over all reruns(Y) vs Iteration values(X)"
-set style fill solid 1.00 border lt -1
-set xlabel "Iteration values"
-set ylabel "Average step time (in ms)"
-set datafile separator ","
-plot '../data/temp.csv' using 0:2 with boxes
