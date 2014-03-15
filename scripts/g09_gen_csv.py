@@ -5,9 +5,9 @@ import random
 num_iters = 500
 num_reruns = 50
 exe_path = "./mybins/cs296_09_exe"
-csv1 = open("/data/g09_lab09data_01.csv",'w+')
-csv2 = open("/data/g09_lab09data_02.csv",'w+')
-csvr = open("/data/g09_lab09data_random.csv",'w+')
+csv1 = open("./data/g09_lab09data_01.csv",'w+')
+csv2 = open("./data/g09_lab09data_02.csv",'w+')
+csvr = open("./data/g09_lab09data_random.csv",'w+')
 
 
 for i in range(0,num_iters):

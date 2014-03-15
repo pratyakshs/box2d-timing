@@ -144,10 +144,10 @@ data: exe
 	@echo "Generating csv files..."
 	@python3 $(SCRIPTDIR)/g09_gen_csv.py
 
-plot: data
+plot: 
 	@mkdir -p plots;
 	@echo "Generating plots..."
-	@python3 $(SCRIPTDIR)/g09_gen_plot.py
+	@python3 $(SCRIPTDIR)/g09_gen_plots.py
 
 report: plot
 	@echo "Generating report..."

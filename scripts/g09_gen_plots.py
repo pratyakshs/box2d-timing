@@ -9,7 +9,8 @@ import csv
 [avg_step, STEP_SUM, COLL_SUM, VEL_SUM, POS_SUM, LOOP_SUM, STEP_MAX, ITER_VAL, SUM_SQUARES, i] = [0] * 10
 STEP_MIN = 100
 iter_count = 500
-[STEP_AVG, COLL_AVG, VEL_AVG, POS_AVG, LOOP_AVG, ERR_AVG] = [[]] * 6
+STEP_AVG, COLL_AVG, VEL_AVG, POS_AVG, LOOP_AVG, ERR_AVG = [], [], [], [], [], []
+
 reruns = 50
 
 #Calculations from 01.csv
@@ -34,6 +35,7 @@ with open('./data/g09_lab09data_01.csv', 'r') as csvfile:
 			ERR_AVG.append(math.sqrt((SUM_SQUARES/reruns)-(STEP_SUM/reruns)*(STEP_SUM/reruns)))
 			[i, STEP_SUM, COLL_SUM, VEL_SUM, POS_SUM, LOOP_SUM, SUM_SQUARES] = [0] * 7
 
+print('hello', len(STEP_AVG))
 a = []
 for i in (0,iter_count):
 	a.append(i+1)
@@ -86,8 +88,8 @@ with open('./data/g09_lab09data_02.csv', 'r') as csvfile:
 	sel_rows = [row for row in csvdata if int(row[0]) == rollno]
 sel_step_avg = [float(i[2]) for i in sel_rows]
 plt.clf()
-plt.hist(array(sel_step_avg), bins = 10, label = "Frequency bar chart")
-hist, bins = np.histogram(sel_step_avg, bins = 10)
+plt.hist(array(sel_step_avg), bins = 20, label = "Frequency bar chart")
+hist, bins = np.histogram(sel_step_avg, bins = 20)
 offset = bins[1:] - bins[:-1]
 plt.plot(bins[:-1] + offset, np.cumsum(hist), label = "Cumulative frequency")
 plt.xlabel("Step time intervals (in ms)")
