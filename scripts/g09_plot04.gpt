@@ -1,0 +1,16 @@
+#!/bin/bash
+set terminal png
+set output '../plots/g09_plot04.png'
+#set boxwidth 0.15
+set style fill solid 0.4
+set xtics
+set title "Frequency Plots"
+set xlabel "Step time intervals (in ms)"
+set ylabel "Step time frequency" 
+bin(x,s) = s*int(x/s)
+set datafile separator ","
+plot  "<(sed -n '5851,6000p' ../data/g09_lab05data_02.csv)" u (bin($3,0.005)):(1.0) s f t 'Frequency bar graph' w boxes,"" u ($3):(1.0) s cumul t 'Cumulative line graph'
+
+#for testing: 
+#plot  "<(sed -n '5851,6000p' ../data/g09_lab05data_01.csv)" u (bin($3,0.005)):(1.0) s f t 'Frequency bar graph' w boxes,"" u ($3):(1.0) s cumul t 'Cumulative line graph'
+

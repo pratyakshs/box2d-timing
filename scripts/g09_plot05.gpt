@@ -1,0 +1,17 @@
+#! /bin/bash
+set terminal png
+set output "../plots/g09_plot05.png"
+#set key inside left top vertical Right noreverse enhanced autotitles box linetype -1 linewidth 1.000
+set title "Step time average over all reruns(Y) vs Iteration values(X)"
+set style fill solid 1.00 border lt -1
+set boxwidth 0.5 absolute
+set xlabel "Iteration values"
+set ylabel "Average step time (in ms)"
+set datafile separator ","
+f(x) = a*x  + b
+g(x) = c*x + d
+fit f(x) '../data/tempr.csv'using 1:2 via a, b
+fit g(x) '../data/temp2.csv'using 1:2 via c, d
+plot g(x) title "Step time from g09_lab05data02.csv",f(x) title "Step time from g09_lab05data_random.csv",'../data/tempr.csv' using 1:2 title "Points from g09_lab05data02.csv",'../data/temp2.csv' using 1:2 title "Points from g09_lab05data_random.csv"
+
+
