@@ -5,25 +5,14 @@ import matplotlib.pyplot as plt; plt.rcdefaults()
 import numpy as np
 import matplotlib.pyplot as plt
 import csv
-avg_step = 0
-STEP_SUM = 0
-COLL_SUM = 0
-VEL_SUM = 0
-POS_SUM = 0
-LOOP_SUM = 0
-STEP_MAX = 0
+
+[avg_step, STEP_SUM, COLL_SUM, VEL_SUM, POS_SUM, LOOP_SUM, STEP_MAX, ITER_VAL, SUM_SQUARES, i] = [0] * 10
 STEP_MIN = 100
-ITER_VAL = 0
-SUM_SQUARES = 0
 iter_count = 500
-STEP_AVG = []
-COLL_AVG = []
-VEL_AVG = []
-POS_AVG = []
-LOOP_AVG = []
-ERR_AVG = []
+[STEP_AVG, COLL_AVG, VEL_AVG, POS_AVG, LOOP_AVG, ERR_AVG] = [[]] * 6
 reruns = 50
-i = 0
+
+#Calculations from 01.csv
 with open('./data/g09_lab09data_01.csv', 'r') as csvfile:
 	csvdata = csv.reader(csvfile, delimiter = ',')		
 	for s in csvdata: 
@@ -43,13 +32,7 @@ with open('./data/g09_lab09data_01.csv', 'r') as csvfile:
 			POS_AVG.append(POS_SUM/reruns)
 			LOOP_AVG.append(LOOP_SUM/reruns)
 			ERR_AVG.append(math.sqrt((SUM_SQUARES/reruns)-(STEP_SUM/reruns)*(STEP_SUM/reruns)))
-			i = 0
-			STEP_SUM = 0
-			COLL_SUM = 0		
-			VEL_SUM = 0
-			POS_SUM = 0
-			LOOP_SUM = 0
-			SUM_SQUARES = 0
+			[i, STEP_SUM, COLL_SUM, VEL_SUM, POS_SUM, LOOP_SUM, SUM_SQUARES] = [0] * 7
 
 a = []
 for i in (0,iter_count):
@@ -57,6 +40,7 @@ for i in (0,iter_count):
 #ind = np.arange(len(OY))
 index = range(1, iter_count + 1)
 
+#Plot 1
 plt.bar(index,STEP_AVG,label = "Step time average")
 plt.plot(index,LOOP_AVG,label = "Loop time average")
 plt.xlabel("Iteration count")
@@ -70,9 +54,10 @@ plt.annotate('maximum', xy = (iter_count - 1, loop_max), xytext = (iter_count -2
       arrowprops = dict(facecolor = 'black', shrink = 0.05),
       )
 plt.legend()
-plt.savefig("figure.png")
+plt.savefig("./plots/g09_lab09_plot01.png")
 
 
+#Plot 2
 plt.clf()
 plt.plot(index,COLL_AVG,label = "collision time average")
 plt.plot(index,VEL_AVG,label = "velocity time average")
@@ -81,20 +66,22 @@ plt.plot(index,[i+j+k for i, j, k in zip(COLL_AVG,VEL_AVG,POS_AVG)],label = "vel
 plt.legend()
 plt.xlabel("Iteration count")
 plt.ylabel("vel,pos,coll and total sum times in ms")
-plt.savefig("figure2.png")
+plt.savefig("./plots/g09_lab09_plot02.png")
 
 
+#Plot 3
 plt.clf()
 plt.errorbar(index, STEP_AVG, yerr = ERR_AVG,label = "error in step_time ")
 plt.plot(index,STEP_AVG,label = "step-time average")
 plt.xlabel("Iteration count")
 plt.ylabel("Step-time average in ms")
 plt.legend()
-plt.savefig("figure3.png")
+plt.savefig("./plots/g09_lab09_plot03.png")
 
 
+#Plot 4
 rollno = 40
-with open('./data/g09_lab09data_01.csv', 'r') as csvfile:
+with open('./data/g09_lab09data_02.csv', 'r') as csvfile:
 	csvdata = csv.reader(csvfile, delimiter = ',')
 	sel_rows = [row for row in csvdata if int(row[0]) == rollno]
 sel_step_avg = [float(i[2]) for i in sel_rows]
@@ -106,9 +93,11 @@ plt.plot(bins[:-1] + offset, np.cumsum(hist), label = "Cumulative frequency")
 plt.xlabel("Step time intervals (in ms)")
 plt.ylabel("Step time frequency")
 plt.legend()
-plt.savefig('figure4.png')
+plt.savefig('./plots/g09_lab09_plot04.png')
 
 
+#Plot 5
+# Calculation from random.csv
 csvr = open('./data/g09_lab09data_random.csv', 'r')
 datar = csv.reader(csvr, delimiter = ',')
 step_avgr = []
@@ -121,20 +110,32 @@ for i, j in enumerate(datar):
 		step_sumr = 0
 step_avgr = [i/rand_rows  for i in step_avgr]
 
+# Calculation from 02.csv
+csv2 = open('./data/g09_lab09data_02.csv', 'r')
+data2 = csv.reader(csv2, delimiter = ',')
+step_avg2 = []
+step_sum2 = 0
+reruns = 50
+for i, j in enumerate(data2):
+	step_sum2 += float(j[2])
+	if (i + 1) % reruns == 0:
+		step_avg2.append(step_sum2)
+		step_sum2 = 0
+step_avg2 = [i/reruns  for i in step_avg2]
+
 plt.clf()
-plt.plot(index, STEP_AVG, 'yx', label = "data from g09_lab09data_01.csv")
-#plt.plot(index, step_avgr, 'ro', ms = 3)
+plt.plot(index, step_avg2, 'yx', label = "data from g09_lab09data_02.csv")
 
 fitr = polyfit(index, step_avgr, 1)
 fit_fnr = poly1d(fitr)
 plt.plot(index, step_avgr, 'ko', ms = 3, label = "data from g09_lab09data_random.csv")
 plt.plot(index, fit_fnr(index), '--k', label = "best fit line of data of random sampled reruns.csv")
 
-fit = polyfit(index, STEP_AVG, 1)
+fit = polyfit(index, step_avg2, 1)
 fit_fn = poly1d(fit)
 plt.plot(index, fit_fn(index), 'y', label = "best fit line of data for all reruns")
 plt.xlabel("Iteration count")
 plt.ylabel("Step time (Averaged over reruns)")
 plt.ylim([0,0.5])
 plt.legend()
-plt.savefig('fig5.png')
+plt.savefig('./plots/g09_lab09_plot05.png')
