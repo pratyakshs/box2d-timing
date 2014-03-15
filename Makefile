@@ -138,16 +138,17 @@ exelib: setup $(OBJS) mylibs
 	then $(CC) -o $(BINDIR)/cs296_09_exelib $(LDFLAGS) $(OBJDIR)/main.o $(LIBDIR)/libCS296test.a $(LIBS); \
 	else $(CC) -o $(BINDIR)/cs296_09_exelib $(LDFLAGS) $(OBJDIR)/main.o $(LIBDIR)/libCS296test.so $(LIBS); \
 	fi;
-report: 
-	@cd $(DOCDIR); latex cs296_report_09.tex; bibtex cs296_report_09; latex cs296_report_09.tex; latex cs296_report_09.tex; latex cs296_report_09.tex; convert cs296_report_09.dvi cs296_report_09.pdf
 
 data: exe
 	@mkdir -p data;
-	@cd $(SCRIPTDIR); chmod +x -R .; echo "Running g09_gen_data.sh..."; ./g09_gen_data.sh; echo "Running g09_gen_csv.sh..."; ./g09_gen_csv.sh; echo "Running g09_gen_data_csv.sh..."; ./g09_gen_data_csv.sh; echo "Running g09_gen_data_random.sh..."; ./g09_gen_data_random.sh;
+	@echo "Generating csv files..."
+	@python3 $(SCRIPTDIR)/g09_gen_csv.py
 
 plot: data
 	@mkdir -p plots;
-	@cd $(SCRIPTDIR); ./stats.sh; ./stats2.sh; gnuplot g09_plot01.gpt; gnuplot g09_plot02.gpt; gnuplot g09_plot03.gpt; gnuplot g09_plot04.gpt; gnuplot g09_plot05.gpt;
-	@rm $(DATADIR)/temp*;
-	@rm $(SCRIPTDIR)/fit.log
+	@echo "Generating plots..."
+	@python3 $(SCRIPTDIR)/g09_gen_plot.py
 
+report: plot
+	@echo "Generating report..."
+	@python3 $(SCRIPTDIR)/g09_gen_html.py
